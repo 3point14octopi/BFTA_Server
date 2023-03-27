@@ -1,0 +1,7 @@
+D:\source\repos\BFTA_Server\bin\Debug\BFTA_Server.exe.config
+D:\source\repos\BFTA_Server\bin\Debug\BFTA_Server.exe
+D:\source\repos\BFTA_Server\bin\Debug\BFTA_Server.pdb
+D:\source\repos\BFTA_Server\obj\Debug\BFTA_Server.csproj.AssemblyReference.cache
+D:\source\repos\BFTA_Server\obj\Debug\BFTA_Server.csproj.CoreCompileInputs.cache
+D:\source\repos\BFTA_Server\obj\Debug\BFTA_Server.exe
+D:\source\repos\BFTA_Server\obj\Debug\BFTA_Server.pdb

@@ -121,7 +121,7 @@ namespace SocketHelpers
         
         public static byte[] ServComToByteBlock(ServerCommand s)
         {
-            int comSize = (s.ComIndex() > 2)?2:Marshal.SizeOf(s);
+            int comSize = Marshal.SizeOf(s);
             byte[] byteBlock = new byte[comSize + 2];
 
             TheWorldsMostUnnecessaryStructure ind = new TheWorldsMostUnnecessaryStructure();

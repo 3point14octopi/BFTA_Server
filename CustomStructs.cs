@@ -60,13 +60,13 @@ namespace BFTA_Server
     {
         [FieldOffset(0)] public int rngSeed;
         [FieldOffset(4)] public short arenaType;
-        [FieldOffset(6)] public short playerLocRotation;
+        [FieldOffset(6)] public short playerIndex;
 
-        public void Setup()
+        public void Setup(short pI = 0)
         {
             rngSeed = 1234;
             arenaType = 1;
-            playerLocRotation = 0;
+            playerIndex = pI;
         }
         public void Execute()
         {
@@ -106,13 +106,39 @@ namespace BFTA_Server
         }
     }
 
+    [StructLayout(LayoutKind.Explicit, Size = 6)]
+    public class CharSelectionsAndPlayerIndex : ServerCommand
+    {
+        [FieldOffset(0)] public short playerIndex;
+        [FieldOffset(2)] public short localPlayerSelection;
+        [FieldOffset(4)] public short remotePlayerSelection;
+
+        public void Setup(short a = 0, short b = 0, short c = 0)
+        {
+            playerIndex = a;
+            localPlayerSelection = b;
+            remotePlayerSelection = c;
+        }
+        
+        public void Execute()
+        {
+            //:boppin:
+        }
+
+        public short ComIndex()
+        {
+            return 1;
+        }
+    }
+
+
     [StructLayout(LayoutKind.Explicit, Size = 8)]
     public class CharacterOrderCommand : ServerCommand
     {
-        [FieldOffset(0)] short ind1;
-        [FieldOffset(2)] short char1;
-        [FieldOffset(4)] short ind2;
-        [FieldOffset(6)] short char2;
+        [FieldOffset(0)] public short ind1;
+        [FieldOffset(2)] public short char1;
+        [FieldOffset(4)] public short ind2;
+        [FieldOffset(6)] public short char2;
 
         public void Setup(short a = 0, short b = 0, short c = 1, short d = 1)
         {
@@ -180,6 +206,29 @@ namespace BFTA_Server
         }
     }
 
+
+    [StructLayout(LayoutKind.Explicit, Size = 4)]
+    public class SetCharacterOrder : ServerCommand
+    {
+        [FieldOffset(0)] public short p1Index;
+        [FieldOffset(2)] public short p2Index;
+
+        public void Setup(short a = 0, short b = 0)
+        {
+            p1Index = a;
+            p2Index = b;
+        }
+
+        public void Execute()
+        {
+            //i wish i was the one being executed rn :(
+        }
+
+        public short ComIndex()
+        {
+            return 5;
+        }
+    }
 
 
 

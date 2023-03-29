@@ -123,24 +123,34 @@ namespace BFTA_Server
 
         public static void StartGame(List<JClient> players)
         {
-            CharacterOrderCommand chorCom = new CharacterOrderCommand();
+            SetCharacterOrder charOr = new SetCharacterOrder();
+            CharSelectionsAndPlayerIndex csapi = new CharSelectionsAndPlayerIndex();
+            StartGameCommand sgCom = new StartGameCommand();
 
             short x = 0;
             for (short a = 0; x < players.Count;
-                a = (x == (players.Count -1))? (short)0 : (short)(x + 1),
-                chorCom.Setup(x, a),
+                //this ONLY works because we have 2 players
+                a = (x == (players.Count - 1)) ? (short)0 : (short)(x + 1),
+                charOr.Setup(x, a),
+                csapi.Setup(x, characters[x], characters[a]),
+                SendServMessTo(players[x], csapi),
+                System.Threading.Thread.Sleep(100),
+                SendServMessTo(players[x], sgCom),
+                System.Threading.Thread.Sleep(1000),
+                SendServMessTo(players[x], charOr), 
                 x++);
 
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(1000);
 
             ArenaSetupCommand arSet = new ArenaSetupCommand();
             arSet.Setup();
             for (int i = 0; i < players.Count;
-                arSet.playerLocRotation = (short)i,
-                SendServMessTo(players[0], arSet), i++) ;
+                arSet.playerIndex = (short)i,
+                SendServMessTo(players[i], arSet), i++) ;
 
 
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(1000);
+            Console.WriteLine("Starting the game!");
         }
 
 
@@ -150,7 +160,6 @@ namespace BFTA_Server
             Queue<JPlayerCommandBlock> outMessages = new Queue<JPlayerCommandBlock> { };
             Queue<JServerCommand> sMes = new Queue<JServerCommand> { };
             StartTurnCommand startTurn = new StartTurnCommand();
-            //SendServMessTo(players[0], new JServerCommand("START"));
             SendServMessTo(players[0], startTurn);
 
 
@@ -196,7 +205,6 @@ namespace BFTA_Server
 
         public static void IdlingHell(List<JClient> clients)
         {
-            StartGameCommand sgCom = new StartGameCommand();
             Console.WriteLine("Waiting for players to select characters...");
             while (!SocketHelpFunctions.AllReady(characters))
             {
@@ -209,9 +217,7 @@ namespace BFTA_Server
                 }
             }
             Console.WriteLine("All players have selected a character!");
-            for (int i = 0; i < clients.Count; SendServMessTo(clients[i], sgCom), i++) ;
-            System.Threading.Thread.Sleep(5000);
-            Console.WriteLine("Starting game...");
+            
         }
 
 

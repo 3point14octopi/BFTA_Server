@@ -55,18 +55,16 @@ namespace BFTA_Server
         short ComIndex();
     }
 
-    [StructLayout(LayoutKind.Explicit, Size = 8)]
+    [StructLayout(LayoutKind.Explicit, Size = 5)]
     public class ArenaSetupCommand : ServerCommand
     {
         [FieldOffset(0)] public int rngSeed;
         [FieldOffset(4)] public short arenaType;
-        [FieldOffset(6)] public short playerIndex;
 
-        public void Setup(short pI = 0)
+        public void Setup(int s = 1234, short aT = 1)
         {
-            rngSeed = 1234;
-            arenaType = 1;
-            playerIndex = pI;
+            rngSeed = s;
+            arenaType = aT;
         }
         public void Execute()
         {
@@ -81,10 +79,6 @@ namespace BFTA_Server
                     break;
             }
 
-            //NetworkParser.aGenRef.GetComponent<MakeArenaArray>().GenerateNewTerrain();
-
-            //if we have multiple players we will do a thing trademark where we determine where 
-            //all of the players actually get positioned on the map
         }
 
         public short ComIndex()
@@ -129,35 +123,6 @@ namespace BFTA_Server
         {
             return 1;
         }
-    }
-
-
-    [StructLayout(LayoutKind.Explicit, Size = 8)]
-    public class CharacterOrderCommand : ServerCommand
-    {
-        [FieldOffset(0)] public short ind1;
-        [FieldOffset(2)] public short char1;
-        [FieldOffset(4)] public short ind2;
-        [FieldOffset(6)] public short char2;
-
-        public void Setup(short a = 0, short b = 0, short c = 1, short d = 1)
-        {
-            ind1 = a;
-            ind2 = b;
-            char1 = c;
-            char2 = d;
-        }
-
-        public void Execute()
-        {
-            //piss and cry
-        }
-
-        public short ComIndex()
-        {
-            return 1;
-        }
-
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 2)]
@@ -230,7 +195,25 @@ namespace BFTA_Server
         }
     }
 
+    [StructLayout(LayoutKind.Explicit, Size = 2)]
+    public class MarkPlayerAsEliminated : ServerCommand
+    {
+        [FieldOffset(0)] public short elimIndex;
+        public void Setup(int e)
+        {
+            elimIndex = (short)e;
+        }
 
+        public void Execute()
+        {
+            //lol i don't actually do anything i'm just :sparkles: CONVINIENT:sparkles:
+        }
+
+        public short ComIndex()
+        {
+            return 6;
+        }
+    }
 
 
 

@@ -72,6 +72,7 @@ namespace SocketHelpers
             try
             {
                 cli.m_bufSize = cli.m_socket.Receive(cli.m_receiveBuffer);
+                Console.WriteLine("Received {0} bytes from {1}", cli.m_bufSize.ToString(), cli.m_name);
                 Buffer.BlockCopy(cli.m_receiveBuffer, 0, shortBuff, 0, 2);
 
                 shrt = BytesToShortStuff(shortBuff);

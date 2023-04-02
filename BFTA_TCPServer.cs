@@ -18,6 +18,7 @@ namespace BFTA_Server
         public static bool turnEnded = false;
         public static bool isSinglePlayer = false;
         public static short[] characters;
+        public static bool[] eliminated;
         
         public static void SendServMessTo(JClient player, ServerCommand sCom)
         {
@@ -93,8 +94,13 @@ namespace BFTA_Server
                     Console.WriteLine("{0} has selected a character", sender.m_name);
                 }
             }
-            else
+            else if(str.val == 6)
             {
+                MarkPlayerAsEliminated ripCom = SocketHelpFunctions.BytesToServCom(parseBuff, new MarkPlayerAsEliminated());
+                eliminated[ripCom.elimIndex] = true;
+                Console.WriteLine("Player{0} has eliminated Player{1}!", sender.m_indexInLobby, ripCom.elimIndex);
+            }
+            else{
                 Console.WriteLine("A ServerCommand was sent, but it could not be parsed properly or was invalid.");
             }
         }
@@ -126,11 +132,11 @@ namespace BFTA_Server
             SetCharacterOrder charOr = new SetCharacterOrder();
             CharSelectionsAndPlayerIndex csapi = new CharSelectionsAndPlayerIndex();
             StartGameCommand sgCom = new StartGameCommand();
-
+            short a = (!isSinglePlayer)?(short)1:(short)0;
             short x = 0;
-            for (short a = 0; x < players.Count;
+            for (; x < players.Count;
                 //this ONLY works because we have 2 players
-                a = (x == (players.Count - 1)) ? (short)0 : (short)(x + 1),
+               
                 charOr.Setup(x, a),
                 csapi.Setup(x, characters[x], characters[a]),
                 SendServMessTo(players[x], csapi),
@@ -138,14 +144,16 @@ namespace BFTA_Server
                 SendServMessTo(players[x], sgCom),
                 System.Threading.Thread.Sleep(1000),
                 SendServMessTo(players[x], charOr), 
-                x++);
+                x++,
+                a = (x == characters.Count() -1)?(short)0:(short)(x+1));
+
+            
 
             System.Threading.Thread.Sleep(1000);
 
             ArenaSetupCommand arSet = new ArenaSetupCommand();
             arSet.Setup();
             for (int i = 0; i < players.Count;
-                arSet.playerIndex = (short)i,
                 SendServMessTo(players[i], arSet), i++) ;
 
 
@@ -192,10 +200,21 @@ namespace BFTA_Server
 
                 if (turnEnded)
                 {
+                    int oldTurn = turn;
                     turn = (turn == 0) ? 1 : 0;
                     turn = (isSinglePlayer) ? 0 : turn;
-                    SendServMessTo(players[turn], startTurn);
-                    turnEnded = false;
+                    System.Threading.Thread.Sleep(100);
+                    if (eliminated[turn])
+                    {
+                        Console.WriteLine("{0} has won!", players[oldTurn].m_name);
+                        turnEnded = false;
+                    }
+                    else
+                    {
+                        SendServMessTo(players[turn], startTurn);
+                        turnEnded = false;
+                    }
+                    
                 }
             }
 
@@ -291,7 +310,8 @@ namespace BFTA_Server
             Console.Write("Enter users: ");
             int s = int.Parse(Console.ReadLine());
             characters = new short[s];
-            for (int itr = 0; itr < s; characters[itr] = -1, itr++) ;
+            eliminated = new bool[s];
+            for (int itr = 0; itr < s; characters[itr] = -1, eliminated[itr] = false, itr++) ;
             if (s == 1) isSinglePlayer = true;
             //Console.Write("Enter the IP address: ");
             string i = "127.0.00.1";

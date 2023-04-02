@@ -76,7 +76,8 @@ namespace JAFSock
             m_sender = n;
 
             m_commandQueue = new byte[s];
-            Array.Copy(buff, 0, m_commandQueue, 0, s);
+            Buffer.BlockCopy(buff, 0, m_commandQueue, 0, s);
+            Console.WriteLine("Created a new command block from {0} with a buffer size of {1}", n, s.ToString());
         }
     }
 

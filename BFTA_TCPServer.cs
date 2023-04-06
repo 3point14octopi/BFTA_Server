@@ -249,19 +249,17 @@ namespace BFTA_Server
             {
                 server.Listen(maxConnections);
 
-                Console.WriteLine("Open for connections...");
+                Console.WriteLine("Starting the server...");
 
                 while (currentClients < (maxConnections))
                 {
+                    Console.WriteLine("Open for connections! ({0}/2)", currentClients);
                     clients.Add(new JClient(currentClients, "Player_0" + (currentClients + 1).ToString()));
                     clients[currentClients].m_socket = server.Accept();
                     currentClients++;
 
                     Console.WriteLine("{0} connected", clients[currentClients - 1].m_name);
-                    for (int i = 0; i < currentClients - 1; i++)
-                    {
-                        //clients[i].m_socket.Send(Encoding.ASCII.GetBytes("[SERVER]: " + clients[currentClients - 1].m_name + " joined. Waiting for users..."));
-                    }
+                    
                 }
 
             }
@@ -306,16 +304,11 @@ namespace BFTA_Server
         }
         public static int Main(string[] args)
         {
-            Console.WriteLine("this shitty server uses 127.0.0.1 as the default. isn't that nice?");
-            Console.Write("Enter users: ");
-            int s = int.Parse(Console.ReadLine());
-            characters = new short[s];
-            eliminated = new bool[s];
+            int s = 2;
+            characters = new short[2];
+            eliminated = new bool[2];
             for (int itr = 0; itr < s; characters[itr] = -1, eliminated[itr] = false, itr++) ;
-            if (s == 1) isSinglePlayer = true;
-            //Console.Write("Enter the IP address: ");
-            string i = "127.0.00.1";
-            StartServer(s, i);
+             StartServer(s, "127.0.0.1");
             
             
             return 0;

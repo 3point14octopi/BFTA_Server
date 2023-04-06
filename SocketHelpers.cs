@@ -72,6 +72,12 @@ namespace SocketHelpers
             try
             {
                 cli.m_bufSize = cli.m_socket.Receive(cli.m_receiveBuffer);
+                if(cli.m_bufSize == 0)
+                {
+                    Console.WriteLine("{0} will be disconnected due to a suspected connection issue (0 byte message received)", cli.m_name);
+                    cli.m_deathFlagged = true;
+                    return 0;
+                }
                 Console.WriteLine("Received {0} bytes from {1}", cli.m_bufSize.ToString(), cli.m_name);
                 Buffer.BlockCopy(cli.m_receiveBuffer, 0, shortBuff, 0, 2);
 

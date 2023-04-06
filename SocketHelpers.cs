@@ -72,12 +72,20 @@ namespace SocketHelpers
             try
             {
                 cli.m_bufSize = cli.m_socket.Receive(cli.m_receiveBuffer);
+                
+                if(cli.m_bufSize == 0)
+                {
+                    Console.WriteLine("0 bytes received from {0}. They will be disconnected due to suspected connectivity issues.", cli.m_name);
+                    cli.m_deathFlagged = true;
+                    return 0;
+                }
+                
                 Console.WriteLine("Received {0} bytes from {1}", cli.m_bufSize.ToString(), cli.m_name);
                 Buffer.BlockCopy(cli.m_receiveBuffer, 0, shortBuff, 0, 2);
 
                 shrt = BytesToShortStuff(shortBuff);
 
-                if(shrt.val < 1 || shrt.val > 2)
+                if(shrt.val < 1 || shrt.val > 3)
                 {
                     Console.WriteLine("Could not properly parse command block from {0}. Desynching game states may now occur", cli.m_name);
                     cli.m_deathFlagged = true;

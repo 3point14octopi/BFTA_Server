@@ -114,7 +114,7 @@ namespace BFTA_Server
             {
                 outMessages.Enqueue(j.ConvertToComBlock());
                 turnEnded = true;
-            }else if (comType == 2)
+            }else if (comType == 3)
             {
                 ParseExternalServerCommand(j);
             }
@@ -206,7 +206,14 @@ namespace BFTA_Server
                     System.Threading.Thread.Sleep(100);
                     if (eliminated[turn])
                     {
+                        FlashWinLoss wl = new FlashWinLoss();
+                        wl.endCond = 1;
+                        SendServMessTo(players[oldTurn], wl);
                         Console.WriteLine("{0} has won!", players[oldTurn].m_name);
+                        System.Threading.Thread.Sleep(100);
+                        wl.endCond = 0;
+                        SendServMessTo(players[turn], wl);
+
                         turnEnded = false;
                     }
                     else

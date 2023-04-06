@@ -116,7 +116,8 @@ namespace BFTA_Server
         
         public void Execute()
         {
-            //:boppin:
+            //once again i should really make this actually do something *but*
+            //it wouldn't really work anymore if i expanded this server
         }
 
         public short ComIndex()
@@ -132,7 +133,10 @@ namespace BFTA_Server
 
         public void Execute()
         {
-            //cope
+            //doesn't really operate as a traditional command 
+            //here to look hot and have a good time
+            //if i cared i would do it better 
+            //do things on time next time dummy
         }
 
         public short ComIndex()
@@ -148,7 +152,7 @@ namespace BFTA_Server
     {
         public void Execute()
         {
-            //seethe?
+            //this command is exclusively created by the server and is only executed client-side
         }
 
         public short ComIndex()
@@ -162,7 +166,7 @@ namespace BFTA_Server
     {
         public void Execute()
         {
-            //cry
+            //this command is exclusively created by the server and is only executed client-side
         }
 
         public short ComIndex()
@@ -186,7 +190,7 @@ namespace BFTA_Server
 
         public void Execute()
         {
-            //i wish i was the one being executed rn :(
+            //this command is exclusively created by the server and is only executed client-side
         }
 
         public short ComIndex()
@@ -206,7 +210,8 @@ namespace BFTA_Server
 
         public void Execute()
         {
-            //lol i don't actually do anything i'm just :sparkles: CONVINIENT:sparkles:
+            //this doesn't really have a need to be executed 
+            //it acts as a "hey server! someone just won!"
         }
 
         public short ComIndex()
@@ -215,7 +220,21 @@ namespace BFTA_Server
         }
     }
 
+    [StructLayout(LayoutKind.Explicit, Size = 2)]
+    public class FlashWinLoss : ServerCommand
+    {
+        [FieldOffset(0)] public short endCond;
 
+        public void Execute()
+        {
+            //this command is exclusively created by the server and is only executed client-side
+        }
+
+        public short ComIndex()
+        {
+            return 7;
+        }
+    }
 
 
 
